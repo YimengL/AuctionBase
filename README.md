@@ -46,9 +46,15 @@ $ sqlite3 auctionbase.sqlite < load.txt
 ```
 The data would be imported from ```bids_uniq.dat```, ```items_uniq.dat```, ```users_uniq.dat```, ```categories_uniq.dat``` to ```auctionbase.sqlite```.
 
-##### Part 1.E: Test your SQLite database
+##### Part 1.E: Test your SQLite database (Finished)
+Finish several ```SQL``` queries to verify the correctness of above steps. **Example**:
+```Bash
+$ sqlite3 auctionbase.sqlite < db/query7.sql
+150
+```
 
 *****
+
 ##### Part 2.A: Current Time
 
 ##### Part 2.B: Constraints and Triggers
