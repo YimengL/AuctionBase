@@ -1,0 +1,16 @@
+delete from Items;
+delete from Categories;
+delete from Bids;
+delete from Users;
+
+.separator |
+.import items_uniq.dat Items
+update Items set buy_price = null where buy_price = "NULL";
+
+.import users_uniq.dat Users
+update Users set location = null where location = "NULL";
+update Users set country = null where country = "NULL";
+
+.import categories_uniq.dat Categories
+
+.import bids_uniq.dat Bids

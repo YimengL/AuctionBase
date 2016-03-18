@@ -3,4 +3,56 @@
 *****
 Database for checking the Ebay historic data. Final Project for Stanford course: [Introduction to Database (CS 145)](http://web.stanford.edu/class/cs145/)  
 Technologies and tools used: **Python**, **SQLite**, **Flask**, **Bootstrap**.
+Author: Yimeng Li
 *****
+
+##### Part 1.A: Examine the XML data files (Finished)
+Using Given DTD file to validate the xml data.
+```Bash
+$ xmllint --valid --noout items-*.xml
+```
+
+##### Part 1.B: Design your relational schema (Finished)
+- **Users(<u>User_ID</u>, Rating, Location, Country)**
+- **Items(<u>Item_ID</u>, Seller_ID, Name, Buy_Price, First_Bid, Currently, Number_of_Bids, Started, Ends, Description)**
+- **Categories(<u>Item_ID</u>, <u>Category</u>)**
+- **Bids(<u>Item_ID</u>, <u>User_ID</u>, <u>Time</u>, Amount)**
+
+##### Part 1.C: Write a data transformation program (Finished)
+- Finish ```parser.py```. Use Command:
+```Bash
+python parser.py data/items-*.xml
+```
+to generate ```bids.dat```, ```items.dat```, ```users.dat```, ```categories.dat```.
+- Use unix tool to eliminate duplicates.
+```Bash
+$ sort bids.dat | uniq > bids_uniq.dat
+$ sort items.dat | uniq > items_uniq.dat
+$ sort users.dat | uniq > users_uniq.dat
+$ sort categories.dat | uniq > categories_uniq.dat
+```
+
+##### Part 1.D: Load your data into SQLite (Finished)
+- Create the ```auctionbase.sqlite``` database using
+```Bash
+$ sqlite3 auctionbase.sqlite
+```
+- Finish ```create.sql```, ```drop.sql``` and ```load.txt``` to automate the table creation and [**data bulk-loading**](http://cs.stanford.edu/people/widom/cs145/sqlite/SQLiteLoad.html) processes.
+
+- By running the
+```Bash
+$ sqlite3 auctionbase.sqlite < create.sql
+$ sqlite3 auctionbase.sqlite < load.txt
+```
+The data would be imported from ```bids_uniq.dat```, ```items_uniq.dat```, ```users_uniq.dat```, ```categories_uniq.dat``` to ```auctionbase.sqlite```.
+
+##### Part 1.E: Test your SQLite database
+
+*****
+##### Part 2.A: Current Time
+
+##### Part 2.B: Constraints and Triggers
+
+*****
+
+##### Part 3. Web Application
