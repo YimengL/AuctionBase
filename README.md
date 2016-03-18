@@ -2,7 +2,9 @@
 
 *****
 Database for checking the Ebay historic data. Final Project for Stanford course: [Introduction to Database (CS 145)](http://web.stanford.edu/class/cs145/)  
+
 Technologies and tools used: **Python**, **SQLite**, **Flask**, **Bootstrap**.
+
 Author: Yimeng Li
 *****
 
@@ -55,7 +57,11 @@ $ sqlite3 auctionbase.sqlite < db/query7.sql
 
 *****
 
-##### Part 2.A: Current Time
+##### Part 2.A: Current Time (Finished)
+Create CurrentTime table: ```time.sql```, and load it into ```auctionbase.sqlite``` database.
+```Bash
+sqlite3 auctionbase.sqlite < time.sql
+```
 
 ##### Part 2.B: Constraints and Triggers
 
