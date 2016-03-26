@@ -32,6 +32,8 @@ class Item(Model):
 	class Meta:
 		database = DATABASE
 		db_table = 'items'
+		constraints = [SQL('foreign key (seller_id) references users(user_id)'),
+						Check('started < ends')]
 
 
 class Category(Model):
@@ -43,6 +45,7 @@ class Category(Model):
 		database = DATABASE
 		db_table = 'categories'
 		primary_key = CompositeKey('item_id', 'category')
+		constraints = [SQL('foreign key (item_id) references items(item_id)')]
 
 
 class Bid(Model):
@@ -56,9 +59,30 @@ class Bid(Model):
 		database = DATABASE
 		db_table = 'bids'
 		primary_key = CompositeKey('item_id', 'user_id', 'time')
+		constraints = [SQL('foreign key (item_id) references items(item_id)'),
+		SQL('foreign key (user_id) references users(user_id)')]
+
+
+class Time(Model):
+	
+	cur_time = DateTimeField(primary_key=True)
+	
+	class Meta:
+		database = DATABASE
+		db_table = 'times'
+	
+	
+	@classmethod
+	def create_time(cls, time):
+		try:
+			with DATABASE.transaction():
+				cls.create(cur_time=time)
+		except IntegrityError:
+			raise ValueError("Already has this time")
 
 
 def initialize():
+	"""Create Database and Tables"""
 	DATABASE.connect()
-	DATABASE.create_tables([User, Item, Category, Bid], safe=True)
+	DATABASE.create_tables([User, Item, Category, Bid, Time], safe=True)
 	DATABASE.close()

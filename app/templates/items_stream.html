@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block page_content %}
+<div class="page-header">
+	<h1>Hello Strangler!</h1>
+</div>
+<ul class="items">
+	{% for item in items_stream %}
+	<li class="item">
+		<div>
+			<div class="item-name">
+				<a href="{{ url_for('item', item_id=item.item_id) }}">{{ item.name }}</a>
+			</div>
+			<div>
+				start date: {{ item.started }}
+				end date: {{ item.ends }}
+			</div>
+			<div>
+				number of bids: {{ item.number_of_bids }}
+			</div>
+			<div>
+				current highest price: {{ item.currently }}
+			</div>
+		</div>
+	</li>
+	{% endfor %}
+</ul>
+{% endblock %}
