@@ -1,5 +1,6 @@
 from peewee import *		# Using peewee ORM
 
+
 DATABASE = SqliteDatabase('test.sqlite')
 
 class User(Model):

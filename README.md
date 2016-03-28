@@ -63,8 +63,33 @@ Create CurrentTime table: ```time.sql```, and load it into ```auctionbase.sqlite
 sqlite3 auctionbase.sqlite < time.sql
 ```
 
-##### Part 2.B: Constraints and Triggers
+##### Part 2.B: Constraints and Triggers (paused)
 
 *****
 
-##### Part 3. Web Application
+##### Part 3 Web Application
+- Install [```flask```]() and [```peewee```](http://docs.peewee-orm.com/en/latest/) & Run simple hello app.  
+- Translate the original ```create.sql``` to ```models.py```  
+
+###### Require Functionality
++ Ability to manually change the "current time".
++ Ability for auction users to enter bids on open auctions.
++ Ability to browse auction of interest based on the following input parameters: (**FINISHED**)
+    - item ID
+    - category
+    - item description
+    - price
+    - open/closed status
++ Ability to view all relevant information pertaining to a single auction. This should be displayed on an individual webpage, and it should display all of the information in your database pertaining to that particular item. In particular, this page should include:
+    - the auction's open/close status
+    - the acution's bids. You should also display all relevant information for each bid, including:
+        * the name of bidder
+        * the time of the bid
+        * the price of the bid
+    - if the auction is closed, it should display the winner of the auction  
+
+###### Extra:
++ Registration/Login/Logout
++ Support Pagination
++ Host on Digital Ocean
+*****

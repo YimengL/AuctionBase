@@ -17,3 +17,26 @@ ul.items li.item:hover {
 div.item-name {
 	font-weight: bold;
 }
+
+div.search {
+	padding: 0px;
+	margin: 16px 0px 0px 0px;
+	border-top: 1px solid #e0e0e0;
+}
+
+/* form */
+form {
+	margin: 0 auto;
+	padding: 40px;
+}
+
+input {
+	width: 60%;
+	margin: 0 0 20px;
+}
+
+button {
+	width: 60%;
+	background: #000;
+	color: #fff;
+}

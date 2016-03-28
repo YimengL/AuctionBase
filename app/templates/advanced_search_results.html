@@ -1,11 +1,10 @@
 {% extends "layout.html" %}
 
 {% block page_content %}
-<div class="page-header">
-	<h1>Hello Strangler!</h1>
-</div>
+<h2>Searching Result</h2>
 <ul class="items">
-	{% for item in items_stream %}
+	{{ result | length }}
+	{% for item in result %}
 	<li class="item">
 		<div>
 			<div class="item-name">
@@ -25,14 +24,4 @@
 	</li>
 	{% endfor %}
 </ul>
-
-
-<div ul class="pagination">
-	{% if page > 1 %}
-	<a class="prev" style="float:left;" href="{{ url_for('index', page=page-1) }}">Previous</a>
-	{% endif %}
-	{% if page < pages %}
-	<a class="next" style="float:right;" href="{{ url_for('index', page=page+1) }}">Next</a>
-	{% endif %}
-</div>
 {% endblock %}
