@@ -1,0 +1,33 @@
+{% macro paginate(page, pages, cnt, s_point, e_point) %}
+<div class="pagination-page-info">
+	{{ "Total: %s, Current Page: %s ~ %s" % (cnt, s_point, e_point)}}
+</div>
+<ul class="pagination">
+	{% if pages > 1 %}
+		{% if page == 1 %}
+		<li>
+			<a>{{ "<<" }}</a>
+		</li>
+		{% else %}
+		<li>
+			<a href="{{ url_for('index', page=page-1) }}">{{ "<<" }}</a>
+		</li>
+		{% endif %}
+
+		<li>
+			<a>{{ "%s/%s" % (page, pages) }}</a>
+		</li>
+		
+		{% if page == pages %}
+		<li>
+			<a>{{ ">>" }}</a>
+		</li>
+		{% else %}
+		<li>
+			<a href="{{ url_for('index', page=page+1) }}">{{ ">>" }}</a>
+		</li>
+		{% endif %}
+	{% endif %}
+</ul>
+
+{% endmacro %}

@@ -5,7 +5,7 @@ Database for checking the Ebay historic data. Final Project for Stanford course:
 
 Technologies and tools used: **Python**, **SQLite**, **Flask**, **Bootstrap**.
 
-Author: Yimeng Li
+Author: Yimeng Li  
 *****
 
 ##### Part 1.A: Examine the XML data files (Finished)
@@ -72,6 +72,7 @@ sqlite3 auctionbase.sqlite < time.sql
 - Translate the original ```create.sql``` to ```models.py```  
 
 ###### Require Functionality
++ Registration/Login/Logout
 + Ability to manually change the "current time".
 + Ability for auction users to enter bids on open auctions.
 + Ability to browse auction of interest based on the following input parameters: (**FINISHED**)
@@ -89,7 +90,9 @@ sqlite3 auctionbase.sqlite < time.sql
     - if the auction is closed, it should display the winner of the auction  
 
 ###### Extra:
-+ Registration/Login/Logout
-+ Support Pagination
+
++ Support Pagination (**FINISHED**)
 + Host on Digital Ocean
++ Friendly UI
+
 *****
