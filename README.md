@@ -6,6 +6,7 @@ Database for checking the Ebay historic data. Final Project for Stanford course:
 Technologies and tools used: **Python**, **SQLite**, **Flask**, **Bootstrap**.
 
 Author: Yimeng Li  
+Website: [http://yimengli.me/](http://yimengli.me/)
 *****
 
 ##### Part 1.A: Examine the XML data files (Finished)
@@ -92,7 +93,7 @@ sqlite3 auctionbase.sqlite < time.sql
 ###### Extra:
 
 + Support Pagination (**FINISHED**)
-+ Host on Digital Ocean
++ Host on Digital Ocean (**FINISHED**)
 + Friendly UI
 
 *****

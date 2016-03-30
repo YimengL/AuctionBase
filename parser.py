@@ -193,11 +193,9 @@ def parseXml(f):
 		for category in categories:
 			category_lst.append(getElementText(category))
 		currently = transformDollar(getElementTextByTagNameNR(item, 'Currently'))
-		buy_price = "NULL"
-		try:
-			buy_price = transformDollar(getElementTextByTagNameNR(item, "Buy_Price"))
-		except:
-			pass
+		buy_price = transformDollar(getElementTextByTagNameNR(item, "Buy_Price"))
+		if buy_price == '':
+			buy_price = "NULL"
 		first_bid = transformDollar(getElementTextByTagNameNR(item, "First_Bid"))
 		number_of_bids = getElementTextByTagNameNR(item, "Number_of_Bids")
 		location = getElementTextByTagNameNR(item, "Location")

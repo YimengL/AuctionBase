@@ -33,13 +33,9 @@ def after_request(response):
 
 
 @app.route('/')
-def welcome():
-	return redirect('index')
-
-
-@app.route('/index/', defaults={'page': 1})
+@app.route('/index/')
 @app.route('/index/<int:page>')
-def index(page):
+def index(page=1):
 	"""
 	root controller
 	render all the bids data on page
