@@ -1,9 +1,10 @@
+from flask.ext.login import UserMixin
 from peewee import *		# Using peewee ORM
 
 
 DATABASE = SqliteDatabase('test.sqlite')
 
-class User(Model):
+class User(UserMixin, Model):
 	
 	user_id = TextField(primary_key=True)
 	rating = DoubleField()
@@ -13,6 +14,10 @@ class User(Model):
 	class Meta:
 		database = DATABASE
 		db_table = 'users'
+	
+	
+	def get_id(self):
+		return self.user_id
 
 
 class Item(Model):

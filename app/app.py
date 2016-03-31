@@ -1,7 +1,8 @@
 import datetime
 
-from flask import Flask, render_template, g, request, url_for, redirect
+from flask import Flask, render_template, g, request, url_for, redirect, flash
 from flask.ext.bootstrap import Bootstrap
+from flask.ext.login import LoginManager, login_user, logout_user, login_required, current_user
 
 import models
 import forms
@@ -17,12 +18,25 @@ app = Flask(__name__)
 app.secret_key = "random"		# wtf-form require a secret_key
 bootstrap = Bootstrap(app)
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'	# useful when adding 
+
+
+@login_manager.user_loader
+def load_user(user_id):
+	try:
+		return models.User.get(models.User.user_id == user_id)
+	except models.DoesNotExist:
+		return None
+
 
 @app.before_request
 def before_request():
 	"""Connect to the database before each request."""
 	g.db = models.DATABASE		# g is global
 	g.db.connect()
+	g.user = current_user
 
 
 @app.after_request
@@ -30,6 +44,47 @@ def after_request(response):
 	"""Close the database connection after each request"""
 	g.db.close()
 	return response
+
+"""
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	form = forms.RegisterForm()
+	if form.validate_on_submit():
+		flash("Congrat, you've registered", "success")
+		models.User.create_user(
+			user_id=form.user_id.data,
+			location=form.location.data,
+			country=form.country.data
+		)
+		return redirect(url_for('index'))
+	return render_template('register.html', form=form)
+"""
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+	"""login the AuctionBase Application"""
+	form = forms.LoginForm()
+	if form.validate_on_submit():
+		try:
+			user = models.User.get(models.User.user_id == form.user_id.data)
+		except models.DoesNotExist:
+			flash("Your id is not in our record", "danger")
+		else:
+			print user.user_id
+			login_user(user)
+			flash("You've been logged in!", "success")
+			return redirect(url_for('index'))
+	
+	return render_template('login.html', form=form)
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+@login_required
+def logout():
+	print "logout"
+	logout_user()
+	flash("You've been logout! Come back soon!", "success")
+	return redirect(url_for('index'))
 
 
 @app.route('/')

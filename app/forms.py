@@ -10,3 +10,12 @@ class SearchForm(Form):
 	min_price = DecimalField('Min Price', default=0.0)
 	max_price = DecimalField('Max Price', default=1000000.0)
 	status = SelectField('Status', choices=[('upcoming', 'upcoming'), ('open', 'open'), ('closed', 'closed')])
+
+"""
+class RegisterForm(Form):
+	user_id = StringField()
+"""
+
+class LoginForm(Form):
+	"""Simple version of Login Form, only need id"""
+	user_id = StringField('User ID')
