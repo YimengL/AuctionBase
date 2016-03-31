@@ -2,9 +2,7 @@
 {% from 'page_macros.html' import paginate %}
 
 {% block page_content %}
-<div class="page-header">
-	<h1>Hello Stranger!</h1>
-</div>
+{{ super() }}
 
 {{ paginate(page, pages, cnt, s_point, e_point) }}
 
