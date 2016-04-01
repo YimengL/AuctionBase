@@ -73,7 +73,7 @@ sqlite3 auctionbase.sqlite < time.sql
 - Translate the original ```create.sql``` to ```models.py```  
 
 ###### Require Functionality
-+ Registration/Login/Logout
++ Registration/Login/Logout/Personal Profile(Edit)
 + Ability to manually change the "current time".
 + Ability for auction users to enter bids on open auctions.
 + Ability to browse auction of interest based on the following input parameters: (**FINISHED**)

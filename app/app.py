@@ -45,7 +45,7 @@ def after_request(response):
 	g.db.close()
 	return response
 
-"""
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 	form = forms.RegisterForm()
@@ -58,7 +58,7 @@ def register():
 		)
 		return redirect(url_for('index'))
 	return render_template('register.html', form=form)
-"""
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -70,7 +70,6 @@ def login():
 		except models.DoesNotExist:
 			flash("Your id is not in our record", "danger")
 		else:
-			print user.user_id
 			login_user(user)
 			flash("You've been logged in!", "success")
 			return redirect(url_for('index'))

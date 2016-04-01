@@ -15,9 +15,22 @@ class User(UserMixin, Model):
 		database = DATABASE
 		db_table = 'users'
 	
-	
 	def get_id(self):
 		return self.user_id
+	
+	
+	@classmethod
+	def create_user(cls, user_id, location, country):
+		if country == "":
+			country = None
+		if location == "":
+			location = None
+		try:
+			with DATABASE.transaction():
+				cls.create(user_id=user_id, location=location, country=country, rating=50.0)
+		except IntegrityError:
+			raise ValueError("User already exists")
+
 
 
 class Item(Model):

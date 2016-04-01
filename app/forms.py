@@ -1,5 +1,14 @@
 from flask_wtf import Form
 from wtforms import StringField, SelectField, DecimalField
+from wtforms.validators import DataRequired, ValidationError
+
+from models import User
+
+
+def userid_exists(form, field):
+	"""helper function to check if user id is unique"""
+	if User.select().where(User.user_id == field.data).exists():
+		raise ValidationError("User with that id already exists.")
 
 
 class SearchForm(Form):
@@ -11,10 +20,12 @@ class SearchForm(Form):
 	max_price = DecimalField('Max Price', default=1000000.0)
 	status = SelectField('Status', choices=[('upcoming', 'upcoming'), ('open', 'open'), ('closed', 'closed')])
 
-"""
+
 class RegisterForm(Form):
-	user_id = StringField()
-"""
+	user_id = StringField('User ID', validators=[DataRequired(), userid_exists])
+	location = StringField('Location')
+	country = StringField('Country')
+
 
 class LoginForm(Form):
 	"""Simple version of Login Form, only need id"""
