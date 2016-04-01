@@ -15,6 +15,7 @@ class User(UserMixin, Model):
 		database = DATABASE
 		db_table = 'users'
 	
+	
 	def get_id(self):
 		return self.user_id
 	

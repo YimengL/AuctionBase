@@ -95,7 +95,7 @@ def index(page=1):
 	render all the bids data on page
 	"""
 	cnt = models.Item.select().count()
-	items_stream = models.Item.select().paginate(page, ITEMS_PER_PAGE)
+	items_stream = models.Item.select().order_by(models.Item.ends.desc()).paginate(page, ITEMS_PER_PAGE)
 	pages = (models.Item.select().count() - 1) / ITEMS_PER_PAGE + 1
 	
 	if cnt == 0:
@@ -103,8 +103,9 @@ def index(page=1):
 	else:
 		s_point = (page - 1) * ITEMS_PER_PAGE + 1
 		e_point = min(page * ITEMS_PER_PAGE, cnt)
-	
-	return render_template('items_stream.html', items_stream=items_stream, page=page, pages=pages, cnt=cnt, s_point=s_point, e_point=e_point)
+		
+	cur_time = models.Time.select().limit(1).get().cur_time
+	return render_template('items_stream.html', items_stream=items_stream, page=page, pages=pages, cnt=cnt, s_point=s_point, e_point=e_point, cur_time=cur_time)
 
 
 @app.route('/about')
@@ -133,7 +134,7 @@ def advanced_search():
 @app.route('/advanced_search_results/<item_id>/<description>/<category>/<min_price>/<max_price>/<status>/<int:page>')
 def advanced_search_results(item_id, description, category, min_price, max_price, status, page=1):
 	"""Show the results of advanced, search"""
-	result = models.Item.select()
+	result = models.Item.select().order_by(models.Item.ends.desc())
 	
 	# based on the item_id
 	if item_id != "null":
@@ -188,7 +189,9 @@ def advanced_search_results(item_id, description, category, min_price, max_price
 		s_point = (page - 1) * ITEMS_PER_PAGE + 1
 		e_point = min(page * ITEMS_PER_PAGE, cnt)
 	
-	return render_template('advanced_search_results.html', items_stream=items_stream, page=page, pages=pages, item_id=item_id, description=description, category=category, min_price=min_price, max_price=max_price, status=status, cnt=cnt, s_point=s_point, e_point=e_point)
+	cur_time = models.Time.select().limit(1).get().cur_time
+	
+	return render_template('advanced_search_results.html', items_stream=items_stream, page=page, pages=pages, item_id=item_id, description=description, category=category, min_price=min_price, max_price=max_price, status=status, cnt=cnt, s_point=s_point, e_point=e_point, cur_time=cur_time)
 
 
 ###############################################################

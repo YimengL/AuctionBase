@@ -2,33 +2,49 @@
 {% from 'page_search_macros.html' import paginate %}
 
 {% block page_content %}
-<div class="page-header">
-	<h1>Hello Stranger!</h1>
-</div>
+{{ super() }}
 
 {{ paginate(item_id, description, category, min_price, max_price, status, page, pages, cnt, s_point, e_point) }}
 
+<div class="container">
 <ul class="items">
 	{% for item in items_stream %}
 	<li class="item">
-		<div>
-			<div class="item-name">
-				<a href="{{ url_for('item', item_id=item.item_id) }}">{{ item.name }}</a>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="item-name">
+					<a href="{{ url_for('item', item_id=item.item_id) }}">{{ item.name }}</a>
+				</div>
+				<div>
+					<b>start date</b>: {{ item.started }}
+					, <b>end date</b>: {{ item.ends }}
+				</div>
+				<div>
+					<b>number of bids</b>: {{ item.number_of_bids }}
+				</div>
+				<div>
+					<b>current highest price</b>: {{ "$%s"|format(item.currently) }}
+				</div>
+				<div>
+					<b>current status</b>: 
+					{% if cur_time < item.started %}
+						<span class="text-info">Upcoming</span>
+					{% elif cur_time > item.ends %}
+						<span class="text-danger">Closed</span>
+					{% else %}
+						<span class="text-success">Open</span>
+					{% endif %} 
+				</div>
 			</div>
-			<div>
-				start date: {{ item.started }}
-				end date: {{ item.ends }}
+			<div class="col-md-4">
+				<img class="img-responsive" src="http://placehold.it/350x100">
 			</div>
-			<div>
-				number of bids: {{ item.number_of_bids }}
-			</div>
-			<div>
-				current highest price: {{ item.currently }}
-			</div>
+			<hr>
 		</div>
 	</li>
 	{% endfor %}
 </ul>
+</div>
 
 {{ paginate(item_id, description, category, min_price, max_price, status, page, pages, cnt, s_point, e_point) }}
 {% endblock %}
