@@ -27,9 +27,9 @@
 				</div>
 				<div>
 					<b>current status</b>: 
-					{% if cur_time < item.started %}
+					{% if g.cur_time < item.started %}
 						<span class="text-info">Upcoming</span>
-					{% elif cur_time > item.ends %}
+					{% elif g.cur_time > item.ends %}
 						<span class="text-danger">Closed</span>
 					{% else %}
 						<span class="text-success">Open</span>

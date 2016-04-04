@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import StringField, SelectField, DecimalField
+from wtforms import StringField, SelectField, DecimalField, DateTimeField
 from wtforms.validators import DataRequired, ValidationError
 
 from models import User
@@ -30,3 +30,8 @@ class RegisterForm(Form):
 class LoginForm(Form):
 	"""Simple version of Login Form, only need id"""
 	user_id = StringField('User ID')
+
+
+class TimeForm(Form):
+	"""Using this form to change the current time"""
+	cur_time = DateTimeField('New DateTime', format="%Y-%m-%d %H:%M:%S")

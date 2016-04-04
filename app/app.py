@@ -37,6 +37,7 @@ def before_request():
 	g.db = models.DATABASE		# g is global
 	g.db.connect()
 	g.user = current_user
+	g.cur_time = models.Time.select().limit(1).get().cur_time
 
 
 @app.after_request
@@ -104,14 +105,29 @@ def index(page=1):
 		s_point = (page - 1) * ITEMS_PER_PAGE + 1
 		e_point = min(page * ITEMS_PER_PAGE, cnt)
 		
-	cur_time = models.Time.select().limit(1).get().cur_time
-	return render_template('items_stream.html', items_stream=items_stream, page=page, pages=pages, cnt=cnt, s_point=s_point, e_point=e_point, cur_time=cur_time)
+	return render_template('items_stream.html', items_stream=items_stream, page=page, pages=pages, cnt=cnt, s_point=s_point, e_point=e_point)
 
 
 @app.route('/about')
 def about():
 	"""The usage of this demo application"""
 	return render_template('about.html')
+
+
+@app.route('/select_time', methods=['POST', 'GET'])
+@login_required
+def select_time():
+	"""change the current time, but it can't be backward"""
+	form = forms.TimeForm()
+	if form.validate_on_submit():
+		if form.cur_time.data > g.cur_time:
+			flash("Current Time is changed", "success")
+			q = models.Time.update(cur_time=form.cur_time.data)
+			q.execute()
+			return redirect(url_for('index'))
+		else:
+			flash("Changing time backwards is not allowed!", "danger")
+	return render_template('time.html', form=form)
 
 
 @app.route('/item/<item_id>')
@@ -201,9 +217,10 @@ def advanced_search_results(item_id, description, category, min_price, max_price
 Run the application
 """
 if __name__ == '__main__':
-	models.initialize() 
-	try:
-		models.Time.create_time(datetime.datetime(2001, 12, 20, 0, 0, 1))
-	except ValueError:
-		pass
+	models.initialize()
+	if models.Time.select().count() < 1:
+		try:
+			models.Time.create_time(datetime.datetime(2001, 12, 20, 0, 0, 1))
+		except ValueError:
+			pass
 	app.run(debug=DEBUG, host=HOST, port=PORT)
