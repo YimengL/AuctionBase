@@ -73,27 +73,29 @@ sqlite3 auctionbase.sqlite < time.sql
 - Translate the original ```create.sql``` to ```models.py```  
 
 ###### Require Functionality
-+ Registration/Login/Logout/Personal Profile(Edit)
-+ Ability to manually change the "current time".
-+ Ability for auction users to enter bids on open auctions.
++ Registration/Login/Logout/Personal Profile
++ Ability to manually change the "current time". (**FINISHED**)
++ Ability for auction users to enter bids on open auctions. (**FINISHED**)
 + Ability to browse auction of interest based on the following input parameters: (**FINISHED**)
     - item ID
     - category
     - item description
     - price
     - open/closed status
-+ Ability to view all relevant information pertaining to a single auction. This should be displayed on an individual webpage, and it should display all of the information in your database pertaining to that particular item. In particular, this page should include:
++ Ability to view all relevant information pertaining to a single auction. This should be displayed on an individual webpage, and it should display all of the information in your database pertaining to that particular item. In particular, this page should include: (**FINISHED**)
     - the auction's open/close status
     - the acution's bids. You should also display all relevant information for each bid, including:
         * the name of bidder
         * the time of the bid
         * the price of the bid
     - if the auction is closed, it should display the winner of the auction  
++ Check all the constraints  
 
 ###### Extra:
 
 + Support Pagination (**FINISHED**)
 + Host on Digital Ocean (**FINISHED**)
 + Friendly UI
++ Support place items
 
 *****

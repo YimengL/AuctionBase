@@ -19,7 +19,6 @@ class User(UserMixin, Model):
 	def get_id(self):
 		return self.user_id
 	
-	
 	@classmethod
 	def create_user(cls, user_id, location, country):
 		if country == "":
@@ -31,7 +30,6 @@ class User(UserMixin, Model):
 				cls.create(user_id=user_id, location=location, country=country, rating=50.0)
 		except IntegrityError:
 			raise ValueError("User already exists")
-
 
 
 class Item(Model):
@@ -78,9 +76,17 @@ class Bid(Model):
 	class Meta:
 		database = DATABASE
 		db_table = 'bids'
-		primary_key = CompositeKey('item_id', 'user_id', 'time')
+		primary_key = CompositeKey('item_id', 'time')
 		constraints = [SQL('foreign key (item_id) references items(item_id)'),
 		SQL('foreign key (user_id) references users(user_id)')]
+	
+	@classmethod
+	def create_bid(cls, item_id, user_id, time, amount):
+		try:
+			with DATABASE.transaction():
+				cls.create(item_id=item_id, user_id=user_id, time=time, amount=amount)
+		except IntegrityError:
+			raise ValueError("Someone else bid this item at the same time, please change the current time first!")
 
 
 class Time(Model):
@@ -90,7 +96,6 @@ class Time(Model):
 	class Meta:
 		database = DATABASE
 		db_table = 'times'
-	
 	
 	@classmethod
 	def create_time(cls, time):

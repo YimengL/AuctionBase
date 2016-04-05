@@ -134,7 +134,62 @@ def select_time():
 def item(item_id):
 	"""show the exact item based on the item id"""
 	item = models.Item.get(item_id=item_id)
-	return render_template('item.html', item=item)
+	join_cond = (models.Category.item_id == models.Item.item_id)
+	categories = models.Category.select().join(models.Item, on=join_cond).where(models.Item.item_id == item_id)
+	
+	join_cond2 = (models.Bid.item_id == item_id)
+	bids = models.Bid.select().join(models.Item, on=join_cond2).where(models.Item.item_id == item_id).order_by(models.Bid.time.desc())
+	
+	return render_template('item.html', item=item, categories=categories, bids=bids)
+
+
+@app.route('/bid/<item_id>', methods=['POST', 'GET'])
+@login_required
+def bid(item_id):
+	"""bid the exact item based on the item id"""
+	
+	form = forms.BidForm()
+	item = models.Item.get(item_id=item_id)
+	if form.validate_on_submit():
+		# no auction may have two bids at the exact same time
+		if models.Bid.select().where(models.Bid.item_id == item_id, models.Bid.time == g.cur_time).exists():
+			flash("No auction may have two bids at the exact same time, please select another time", "danger")
+			return render_template('bid.html', item=item, form=form)
+		
+		# Any new bid for a particular item must have a higher amount
+		# number of bids for that particular item.
+		if form.amount.data <= item.currently:
+			flash("Any new bid for a particular item must have a higher amount number of bids for that particular item.", "danger")
+			return render_template('bid.html', item=item, form=form)
+		
+		models.Bid.create_bid(
+			item_id=item_id,
+			user_id=g.user.user_id,
+			time=g.cur_time,
+			amount=form.amount.data
+		)
+		
+		# update the current highest price
+		item.currently = form.amount.data
+		q = models.Item.update(currently=form.amount.data).where(models.Item.item_id == item_id)
+		q.execute()
+		
+		# if this bid's price is higher than the Item.buy_price, then the 
+		# auction will be close, and the current user will win
+		if form.amount.data >= item.buy_price:
+			q = models.Item.update(ends=g.cur_time).where(models.Item.item_id == item_id)
+			q.execute()
+		
+		return redirect(url_for('item', item_id=item_id))
+	if g.user.user_id == item.seller_id:
+		flash("A user may not bid on an item he or she is also selling", "danger")
+	elif g.cur_time < item.started:
+		flash("This item will be opened in the future", "info")
+	elif g.cur_time >= item.ends:
+		flash("This auction was closed!", "danger")
+	else:
+		return render_template('bid.html', item=item, form=form)
+	return redirect(url_for('item', item_id=item_id))
 
 
 @app.route('/advanced_search/', methods=('POST', 'GET'))
@@ -190,7 +245,7 @@ def advanced_search_results(item_id, description, category, min_price, max_price
 		elif status == "open":
 			result = result.where(models.Item.started < cur_time, models.Item.ends > cur_time)
 		else:		# closed
-			result = result.where(models.Item.ends < cur_time)
+			result = result.where(models.Item.ends <= cur_time)
 			
 	except models.DoesNotExist:
 		pass

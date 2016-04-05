@@ -1,10 +1,90 @@
 {% extends "layout.html" %}
 
 {% block page_content %}
-<div>
-	<p>Item: {{ item.name }}</p>
+{{ super() }}
+<div class="container">
+	<div class="row text-info">
+		<h3>Item: {{ item.name }}</h3>
+		<hr>
+	</div>
+
+	<div class="row">
+		<div class="col-md-4">
+			<img class="img-responsive" src="http://placehold.it/400x200">
+		</div>
+		<div class="col-md-4">
+			<ul>
+				<h4>Category:</h4>
+				{% for category in categories %}
+					<li class="text-danger">{{ category.category }}</li>
+				{% endfor %}
+			</ul>
+		</div>
+		<div class="col-md-4">
+			<ul>
+				<h4>Basic Information:</h4>
+				<li class="text-info">Seller ID: {{ item.seller_id }}</li>
+				<li>Status: 
+					{% if g.cur_time < item.started %}
+					<span class="text-info bg-info">Upcoming</span>
+					{% elif g.cur_time >= item.ends %}
+					<span class="text-danger bg-danger">
+						Closed
+					</span>
+						{% if bids|length >= 1 %}
+						<span>, </span>
+						<span class="text-success bg-success">
+							Winner:
+							{% for bid in bids[:1] %}
+								{{ bid.user_id }}
+							{% endfor %}
+						</span>
+						{% endif %}
+					{% else %}
+					<span class="text-success bg-success">Open</span>
+					{% endif %}
+				</li>
+				<li class="text-info">Start time: {{ item.started }}</li>
+				<li class="text-info">End time: {{ item.ends }}</li>
+				<li class="text-danger">Currently highest price: {{ item.currently }}</li>
+			</ul>
+		</div>
+	</div>
+	<hr>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Description</h4>
+			<p>{{ item.description }}</p>
+		</div>
+	</div>
+	<hr>
+	
+	<div class="row">
+		<div class="col-md-12">
+			<h4>Bid History</h4>
+			<ol>
+				{% for bid in bids %}
+				<li>
+					<ul>
+						<li>Bidder ID: {{ bid.user_id }}</li>
+						<li>Bid Time: {{ bid.time }}</li>
+						<li>Price: {{ bid.amount }}</li>
+					</ul>
+				</li>
+				<hr>
+				{% endfor %}
+			</ol>
+			
+		</div>
+	</div>
+	<hr>
+	
+	<div class="row text-center">
+		<a href="{{ url_for('bid', item_id=item.item_id) }}" class="btn btn-default bg-success">Bid this Item</a>
+		<hr>
+	</div>
 </div>
-<a href="{{ url_for('item', item_id=item.item_id) }}" class="btn btn-default">Bid this Item</a>
 
 <div>
 	

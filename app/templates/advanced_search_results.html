@@ -29,7 +29,7 @@
 					<b>current status</b>: 
 					{% if cur_time < item.started %}
 						<span class="text-info">Upcoming</span>
-					{% elif cur_time > item.ends %}
+					{% elif cur_time >= item.ends %}
 						<span class="text-danger">Closed</span>
 					{% else %}
 						<span class="text-success">Open</span>

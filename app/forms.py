@@ -2,7 +2,7 @@ from flask_wtf import Form
 from wtforms import StringField, SelectField, DecimalField, DateTimeField
 from wtforms.validators import DataRequired, ValidationError
 
-from models import User
+from models import User, Bid
 
 
 def userid_exists(form, field):
@@ -35,3 +35,8 @@ class LoginForm(Form):
 class TimeForm(Form):
 	"""Using this form to change the current time"""
 	cur_time = DateTimeField('New DateTime', format="%Y-%m-%d %H:%M:%S")
+
+
+class BidForm(Form):
+	"""Using this form to bid the specific item"""
+	amount = DecimalField('Price')

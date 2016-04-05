@@ -1,8 +1,26 @@
 {% extends "layout.html" %}
+{% from 'macros.html' import render_field %}
 
 {% block page_content %}
-<div>
-	<p>Item: {{ item.name }}</p>
+{{ super() }}
+<div class="container">
+	<hr>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4><a href="{{ url_for('item', item_id=item.item_id) }}">Item: {{ item.name }}</a></h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<form method="POST" action="" class="form">
+				{{ form.hidden_tag() }}
+				{% for field in form %}
+					{{ render_field(field) }}
+				{% endfor %}
+				<button type="submit" id="submit" class="btn btn-default bg-danger text-danger">Bid!!</button>
+			</form>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
