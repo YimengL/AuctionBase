@@ -1,8 +1,8 @@
 from flask_wtf import Form
-from wtforms import StringField, SelectField, DecimalField, DateTimeField
+from wtforms import StringField, SelectField, DecimalField, DateTimeField, TextField
 from wtforms.validators import DataRequired, ValidationError
 
-from models import User, Bid
+from models import User, Bid, Item
 
 
 def userid_exists(form, field):
@@ -40,3 +40,13 @@ class TimeForm(Form):
 class BidForm(Form):
 	"""Using this form to bid the specific item"""
 	amount = DecimalField('Price')
+
+
+class ItemForm(Form):
+	"""Using this form to place new items"""
+	name = StringField("Item Name", validators=[DataRequired()])
+	buy_price = DecimalField("Buy Price")
+	first_bid = DecimalField("First Bid", validators=[DataRequired()])
+	started = DateTimeField("Start Bid Date, format: 2000-11-08 21:21:21", format="%Y-%m-%d %H:%M:%S")
+	ends = DateTimeField("End Bid Date, format: 2000-11-08 21:21:21", format="%Y-%m-%d %H:%M:%S")
+	description = TextField("Description")

@@ -1,4 +1,5 @@
 import datetime
+from random import randint
 
 from flask import Flask, render_template, g, request, url_for, redirect, flash
 from flask.ext.bootstrap import Bootstrap
@@ -20,7 +21,8 @@ bootstrap = Bootstrap(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = 'login'	# useful when adding 
+login_manager.login_view = 'login'	# useful when adding
+login_manager.login_message_category = "info"		# category of the flash message
 
 
 @login_manager.user_loader
@@ -143,6 +145,34 @@ def item(item_id):
 	return render_template('item.html', item=item, categories=categories, bids=bids)
 
 
+def generate_id():
+	"""generate an unique item id"""
+	while True:
+		num = randint(1000000000, 9999999999)
+		if not models.Item.select().where(models.Item.item_id == str(num)).exists():
+			return str(num)
+
+
+@app.route('/place_item', methods=['POST', 'GET'])
+@login_required
+def place_item():
+	"""authenticated user can place new items"""
+	form = forms.ItemForm()
+	
+	if form.validate_on_submit():
+		if form.started.data > form.ends.data:
+			flash("end time can't prior to the start time")
+			render_template('place_item.html', form=form)
+		if form.ends.data < g.cur_time:
+			flash("You can't place an auction had already ended")
+			render_template('place_item.html', form=form)
+		item_id = generate_id()
+		models.Item.create_item(item_id=item_id, seller_id=g.user.user_id, name=form.name.data, buy_price=form.buy_price.data, first_bid=form.first_bid.data, started=form.started.data, ends=form.ends.data, description=form.description.data)
+		flash("Congrat! You have placed an auction successfully!", "success")
+		return redirect(url_for('item', item_id=item_id))
+	return render_template('place_item.html', form=form)
+
+
 @app.route('/bid/<item_id>', methods=['POST', 'GET'])
 @login_required
 def bid(item_id):
@@ -176,7 +206,7 @@ def bid(item_id):
 		
 		# if this bid's price is higher than the Item.buy_price, then the 
 		# auction will be close, and the current user will win
-		if form.amount.data >= item.buy_price:
+		if item.buy_price != None and form.amount.data >= item.buy_price:
 			q = models.Item.update(ends=g.cur_time).where(models.Item.item_id == item_id)
 			q.execute()
 		

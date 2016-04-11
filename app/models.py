@@ -52,6 +52,16 @@ class Item(Model):
 		db_table = 'items'
 		constraints = [SQL('foreign key (seller_id) references users(user_id)'),
 						Check('started < ends')]
+	
+	@classmethod
+	def create_item(cls, item_id, seller_id, name, buy_price, first_bid, started, ends, description):
+		if buy_price == "":
+			buy_price = None
+		try:
+			with DATABASE.transaction():
+				cls.create(item_id=item_id, seller_id=seller_id, name=name, buy_price=buy_price, first_bid=first_bid, currently=first_bid, number_of_bids=0, started=started, ends=ends, description=description)
+		except IntegrityError:
+			raise ValueError("User already exists")
 
 
 class Category(Model):
